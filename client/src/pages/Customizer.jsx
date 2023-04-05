@@ -33,9 +33,26 @@ const Customizer = () => {
                     readFile={readFile}
                 />
             case 'aipicker':
-                return <AIPicker/>
+                return <AIPicker
+                    prompt={prompt}
+                    setPrompt={setPrompt}
+                    generatingImg={generatingImage}
+                    handleSubmit={handleSubmit}
+                />
             default:
                 return null;
+        }
+    }
+    const handleSubmit=async(type)=>{
+        if(!prompt) return alert('Please Enter a Prompt')
+
+        try{
+            // call ai backend to generate the image
+        }catch(e){
+            alert(e)
+        }finally{
+            setGeneratingImage(false)
+            setActiveEditorTab('')
         }
     }
 
@@ -58,6 +75,13 @@ const Customizer = () => {
                 state.isFullTexture=false
                 state.isLogoTexture=true
         }
+        // after setting the state setactivefilter tab
+        setActiveFilterTab((prevState)=>{
+            return {
+                ...prevState,
+                [tabName]:!prevState[tabName]
+            }
+        })
     }
     const readFile=(type)=>{
         reader(file)
@@ -110,9 +134,9 @@ const Customizer = () => {
                             key={tab.name}
                             tab={tab}
                             isFilterTab
-                            isActiveTab=""
+                            isActiveTab={activeFilterTab[tab.name]}
                             handleClick={()=>{
-                                setActiveFilterTab(tab.name)
+                                handleActiveFilterTab(tab.name)
                             }}
                         />
                     ))}
