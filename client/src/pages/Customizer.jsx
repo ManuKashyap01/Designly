@@ -8,7 +8,7 @@ import {downloadCanvasToImage,reader} from '../config/helpers'
 import {EditorTabs,FilterTabs,DecalTypes} from '../config/constants'
 import {fadeAnimation,slideAnimation} from '../config/motion'
 import {AIPicker,ColorPicker,CustomButton,FilePicker,Tab} from '../components'
-
+// import {removeBackgroundFromImageBase64} from 'remove.bg'
 const Customizer = () => {
     const snap=useSnapshot(state)
 
@@ -43,11 +43,35 @@ const Customizer = () => {
                 return null;
         }
     }
+    const removebg_api='2mdERTfr2rHx1cpQag9knD9P'
     const handleSubmit=async(type)=>{
         if(!prompt) return alert('Please Enter a Prompt')
 
         try{
             // call ai backend to generate the image
+            setGeneratingImage(true)
+            const response=await fetch('http://localhost:8080/api/v1/dalle',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    prompt,
+                })
+            })
+            const data=response.json().then((res)=>{
+                // const photo=res.photo
+                // removeBackgroundFromImageBase64({
+                //     base64img:res.photo,
+                //     apiKey:removebg_api,
+                //     size:auto
+                // }).then((res)=>{
+                //     console.log(res)
+                    handleDecals(type,`data:image/png;base64,${res.photo}`)
+                // }).catch((e)=>{
+                //     console.log(e)
+                // })
+            })
         }catch(e){
             alert(e)
         }finally{
