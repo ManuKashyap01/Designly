@@ -14,7 +14,9 @@ const CanvasModel = () => {
       className='w-full max-w-full h-full transition-all ease-in'
     >
       <ambientLight intensity={0.5}/>
-      <Environment preset='city'/>
+      {/* environment is used to set a place for our model and can also be set as background 
+      and our model then does not require additional lighting */}
+      <Environment preset='city' />
       <CameraRig>
         <Backdrop/>
         {/* center is used to position the 3d model in the center of the screen */}

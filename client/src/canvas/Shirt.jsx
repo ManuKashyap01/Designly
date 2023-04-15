@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import {easing} from 'maath'
 import { useSnapshot } from 'valtio'
 import { useFrame } from '@react-three/fiber'
@@ -12,6 +12,54 @@ const Shirt = () => {
     const snap=useSnapshot(state)
     const {nodes, materials}=useGLTF('/shirt_baked.glb')
     
+    useEffect(()=>{
+        window.addEventListener('keydown',(e)=>{
+            if(e.shiftKey){
+                console.log('event',e)
+                switch (e.key) {
+                    case 'ArrowRight':
+                        setlogox(logox+0.01)
+                        break;
+                    case 'ArrowLeft':
+                        setlogox(logox-0.01)
+                        break;
+                    case 'ArrowUp':
+                        setlogoy(logoy+0.01)
+                        break;
+                    case 'ArrowDown':
+                        setlogoy(logoy-0.01)
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            else if(e.ctrlKey){
+                console.log('event',e)
+                switch (e.key) {
+                    case 'ArrowRight':
+                        setfullx(fullx+0.01)
+                        break;
+                    case 'ArrowLeft':
+                        setfullx(fullx-0.01)
+                        break;
+                    case 'ArrowUp':
+                        setfully(fully+0.01)
+                        break;
+                    case 'ArrowDown':
+                        setfully(fully-0.01)
+                        break;
+                    
+                    default:
+                        break;
+                }
+            }
+        })
+    })
+    const [logox, setlogox] = useState(0)
+    const [logoy, setlogoy] = useState(0.04)
+    const [fullx, setfullx] = useState(0)
+    const [fully, setfully] = useState(0)
     const logoTexture=useTexture(snap.logoDecal)
     const fullTexture=useTexture(snap.fullDecal)
     
@@ -20,6 +68,8 @@ const Shirt = () => {
         snap.color,0.25,delta)})
      
     const stateString=JSON.stringify(snap)
+    console.log('logox',logox);
+    console.log('logoy',logoy);
   return (
     // key is used to render colors properly on the t-shirt
     <group key={stateString}>
@@ -32,7 +82,7 @@ const Shirt = () => {
         >
             {snap.isFullTexture && (
                 <Decal
-                    position={[0,0,0]}
+                    position={[fullx,fully,0]}
                     rotation={[0,0,0]}
                     scale={1}
                     map={fullTexture}
@@ -40,7 +90,7 @@ const Shirt = () => {
             )}
             {snap.isLogoTexture && (
                 <Decal
-                    position={[0,0.04,0.15]}
+                    position={[logox,logoy,0.15]}
                     rotation={[0,0,0]}
                     scale={0.15}
                     map={logoTexture}

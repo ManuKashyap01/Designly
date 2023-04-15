@@ -2,9 +2,11 @@ import React,{useRef} from 'react'
 import { easing } from 'maath'
 import { useFrame } from '@react-three/fiber'
 import {AccumulativeShadows,RandomizedLight} from '@react-three/drei'
-
+import { useSnapshot } from 'valtio'
+import state from '../store'
 // this component is responsible for the t-shirt backlight
 const Backdrop = () => {
+    const snap=useSnapshot(state)
     const shadows=useRef()
 
   return (
@@ -16,6 +18,8 @@ const Backdrop = () => {
         // alphTest is used for transparency
         alphaTest={0.85}
         rotation={[Math.PI/2,0,0]}
+        color={snap.color}
+        colorBlend={1}
         position={[0,0,-0.14]}
     >
         <RandomizedLight

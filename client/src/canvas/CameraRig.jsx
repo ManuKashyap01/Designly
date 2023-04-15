@@ -24,8 +24,10 @@ const CameraRig = ({children}) => {
             else targetPosition=[0,0,2]
         }
         // set model camera position
+        // damp3 is used for model or camera positioning
         easing.damp3(state.camera.position, targetPosition, 0.25, delta)
         // setting the model rotation smoothly
+        // dampE is used for model rotation
         easing.dampE(
             group.current.rotation,
             [state.pointer.y/10,-state.pointer.x/5,0],

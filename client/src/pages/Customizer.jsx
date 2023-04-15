@@ -8,7 +8,9 @@ import {downloadCanvasToImage,reader} from '../config/helpers'
 import {EditorTabs,FilterTabs,DecalTypes} from '../config/constants'
 import {fadeAnimation,slideAnimation} from '../config/motion'
 import {AIPicker,ColorPicker,CustomButton,FilePicker,Tab} from '../components'
+import UserGuide from '../components/UserGuide'
 // import {removeBackgroundFromImageBase64} from 'remove.bg'
+// import axios from 'axios'
 const Customizer = () => {
     const snap=useSnapshot(state)
 
@@ -39,11 +41,13 @@ const Customizer = () => {
                     generatingImg={generatingImage}
                     handleSubmit={handleSubmit}
                 />
+            case 'userguide':
+                return <UserGuide/>
             default:
                 return null;
         }
     }
-    const removebg_api='2mdERTfr2rHx1cpQag9knD9P'
+    
     const handleSubmit=async(type)=>{
         if(!prompt) return alert('Please Enter a Prompt')
 
@@ -60,17 +64,9 @@ const Customizer = () => {
                 })
             })
             const data=response.json().then((res)=>{
-                // const photo=res.photo
-                // removeBackgroundFromImageBase64({
-                //     base64img:res.photo,
-                //     apiKey:removebg_api,
-                //     size:auto
-                // }).then((res)=>{
-                //     console.log(res)
-                    handleDecals(type,`data:image/png;base64,${res.photo}`)
-                // }).catch((e)=>{
-                //     console.log(e)
-                // })
+                console.log('ai res',res)
+
+                handleDecals(type,`data:image/png;base64,${res.photo}`)            
             })
         }catch(e){
             alert(e)
@@ -130,7 +126,10 @@ const Customizer = () => {
                                     key={tab.name}
                                     tab={tab}
                                     handleClick={()=>{
-                                        setActiveEditorTab(tab.name)
+                                        if(activeEditorTab.length===0)
+                                            setActiveEditorTab(tab.name)
+                                        else
+                                            setActiveEditorTab('')
                                     }}
                                 />
                             ))}
